@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 INC_FLAGS = -I$(INC_DIR)
 
 #	source files
-SRCS = 	fdf.c destroy.c 
+SRCS = 	fdf.c destroy.c parse.c get_map.c 
 
 # Objetivos predeterminados
 all : $(LIBFT) $(PROGNAME)

@@ -9,14 +9,15 @@
 
 typedef struct	s_fdf
 {
-	char **map;
+	char ***map;
 	int	width;
 	int	height;
 	int	color;
 }				t_fdf;
 
 int				open_file(char *file, int *fd, t_fdf *fdf);
-int				get_height(char *file);
+int				get_height(char	*y_line);
+int				get_width(char *x_line);
 int				get_map(t_fdf *fdf, int fd);
 void			destroy_map(t_fdf *fdf);
 int				get_map(t_fdf *fdf, int fd);

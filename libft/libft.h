@@ -84,6 +84,7 @@ void				*ft_free_array(void **s, int size_s);
 void				ft_free(void *data);
 int					ft_char_in_str(char *s, int c);
 int					ft_wc(char *s);
+int					str_in_str(char *src, char *str);
 
 /*	FOR PRINTF: to print %[+#' '][csdiuXxp]		*/
 

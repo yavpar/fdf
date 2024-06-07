@@ -4,44 +4,29 @@
 
 /*	This funcion cleans the map "char **""	*/
 /*	and the structure fdf					*/
-static void	free_split(char **s);
 
 void	destroy_map(t_fdf *fdf)
 {
-	int	k;
+	int	x;
+	int	y;
 
-	k = 0;
-	if (fdf != NULL)
+	y = -1;
+	if (fdf)
 	{
-		if (fdf->map != NULL)
+		if (fdf->map)
 		{
-			while (fdf->map[k] != NULL)
+			while (++y < fdf->height)
 			{
-				free_split((char **)fdf->map[k]);
-				free(fdf->map[k]);
-				k++;
+				x = -1;
+				while (++x < fdf->width)
+				{
+					if (fdf->map[y][x])
+						free(fdf->map[y][x]);
+				}
+				free(fdf->map[y]);
 			}
 			free(fdf->map);
-			fdf->map = NULL;
 		}
 		free(fdf);
-		fdf = NULL;
-	}
-}
-
-static void	free_split(char **s)
-{
-	int	k;
-
-	k = 0;
-	if (s && *s)
-	{
-		while (s[k] != NULL)
-		{
-			free(s[k]);
-			k++;
-		}
-		free(s);
-		s = NULL;
 	}
 }
