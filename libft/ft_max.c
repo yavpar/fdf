@@ -1,27 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_char_in_str.c                                   :+:      :+:    :+:   */
+/*   ft_max.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 15:01:33 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/09 19:13:24 by yparthen         ###   ########.fr       */
+/*   Created: 2024/06/09 17:41:53 by yparthen          #+#    #+#             */
+/*   Updated: 2024/06/09 17:44:50 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_char_in_str(char *s, int c)
+int	ft_max(int a, int b)
 {
-	int	k;
-
-	k = 0;
-	while (s[k])
-	{
-		if (s[k] == c)
-			return (k);
-		k++;
-	}
-	return (0);
+	if (a > b)
+		return (a);
+	return (b);
 }

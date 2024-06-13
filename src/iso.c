@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_char_in_str.c                                   :+:      :+:    :+:   */
+/*   iso.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/08 15:01:33 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/09 19:13:24 by yparthen         ###   ########.fr       */
+/*   Created: 2024/06/10 13:17:38 by yparthen          #+#    #+#             */
+/*   Updated: 2024/06/10 13:54:29 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "fdf.h"
 
-int	ft_char_in_str(char *s, int c)
+t_2d	projection_2d(t_3d *p)
 {
-	int	k;
-
-	k = 0;
-	while (s[k])
-	{
-		if (s[k] == c)
-			return (k);
-		k++;
-	}
-	return (0);
+	return((t_2d_point){
+		(p.x - p.z) / sqrt(2),
+		(p.x + (p.y * 2) + p.z) / sqrt(6)
+	});
 }
+

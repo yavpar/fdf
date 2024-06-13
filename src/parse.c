@@ -1,32 +1,73 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/09 15:57:12 by yparthen          #+#    #+#             */
+/*   Updated: 2024/06/10 19:54:53 by yparthen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "fdf.h"
 
-int	parse_file(char *file, t_fdf *fdf)
-{
-	int	fd;
-	int	k;
 
-	k = -1;
-	if (open_file(file, &fd, fdf) == 0)
-		exit (3);
-	fdf->height = get_height(file);
-	fdf->width = get_width(file);
-	if (fdf->height <= 0 || fdf->width <= 0)
-		(free(fdf), exit (3));
-	fdf->map = malloc(sizeof(char **) * (fdf->height + 1));	
-	if (fdf->map == NULL)
-		(free(fdf), exit (3));
-	while (++k < fdf->height)
-	{
-		fdf->map[k] = malloc(sizeof(char *) * (fdf->width + 1));
-		if (fdf->map[k] == NULL)
-			(destroy_map(fdf), exit(3));
-	}
-	if (get_map(fdf, fd) != 0)
-		(destroy_map(fdf), exit (1));
-	close(fd);
-	return (0);
+int parse_file(char *file, t_fdf *fdf) {
+    int fd;
+    int k;
+
+    if (open_file(file, &fd, fdf) == 0) exit(3);
+    fdf->height = get_height(file);
+    fdf->width = get_width(file);
+    if (fdf->height <= 0 || fdf->width <= 0) (free(fdf), exit(3));
+
+    fdf->map = malloc(sizeof(char **) * (fdf->height + 1));
+    if (fdf->map == NULL) (free(fdf), exit(3));
+
+    for (k = 0; k < fdf->height; k++) {
+        fdf->map[k] = malloc(sizeof(char *) * (fdf->width + 1));
+        if (fdf->map[k] == NULL) {
+            destroy_map(fdf);
+            exit(3);
+        }
+    }
+
+    if (get_map(fdf, fd) != 0) {
+        destroy_map(fdf);
+        exit(1);
+    }
+    close(fd);
+    return 0;
 }
+
+
+// int	parse_file(char *file, t_fdf *fdf)
+// {
+// 	int	fd;
+// 	int	k;
+
+// 	k = -1;
+// 	if (open_file(file, &fd, fdf) == 0)
+// 		exit (3);
+// 	fdf->height = get_height(file);
+// 	fdf->width = get_width(file);
+// 	if (fdf->height <= 0 || fdf->width <= 0)
+// 		(free(fdf), exit (3));
+// 	fdf->map = malloc(sizeof(char **) * (fdf->height + 1));	
+// 	if (fdf->map == NULL)
+// 		(free(fdf), exit (3));
+// 	while (++k < fdf->height)
+// 	{
+// 		fdf->map[k] = malloc(sizeof(char *) * (fdf->width + 1));
+// 		if (fdf->map[k] == NULL)
+// 			(destroy_map(fdf), exit(3));
+// 	}
+// 	if (get_map(fdf, fd) != 0)
+// 		(destroy_map(fdf), exit (1));
+// 	close(fd);
+// 	return (0);
+// }
 
 
 int	open_file(char *file, int *fd, t_fdf *fdf)
