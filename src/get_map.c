@@ -6,13 +6,13 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:56:47 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/13 12:54:31 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/06/13 18:05:06 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	fill_map(char **dest, char **src);
+static int	fill_map(char **dest, char **src, t_fdf *fdf);
 
 // int get_map(t_fdf *fdf, int fd) {
 //     int x, y;
@@ -71,7 +71,7 @@ int	get_map(t_fdf *fdf, int fd)
 	int	y;
 	char *line;
 	char **map_line;
-	
+
 	fdf->max = INT_MIN;
 	fdf->min = INT_MAX;
 	line = get_next_line(fd);
