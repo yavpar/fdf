@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:56:39 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/12 16:04:29 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:39:01 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 // static int	deal_key(int key)
 // {
-	
+
 // 	ft_printf("%d\n", key);
 // 	return (0);
 // }
@@ -66,17 +66,19 @@ int	main(int ac, char **av)
 		return (1);
 	parse_file(av[1], fdf);
 	print_map(fdf->map);
-	fdf->zoom = 5.0;
+	fdf->zoom = 0.5;
 	fdf->move_x = 3.0;
 	fdf->move_y = 3.0;
+	fdf->angle = 0.01;
 	fdf->my_mlx = mlx_init();
-	fdf->my_mlx_new_win = mlx_new_window(fdf->my_mlx, 1800, 1000, "New Window");
+	//fdf->data_add = mlx_get_data_addr();
+	fdf->my_mlx_new_win = mlx_new_window(fdf->my_mlx, 1800, 1800, "New Window");
 	draw(fdf);
 	//mlx_loop_hook(fdf->my_mlx, &deal_key, fdf);
 	//mlx_key_hook(fdf->my_mlx_new_win, &deal_key, fdf);
 	mlx_key_hook(fdf->my_mlx_new_win, &handle_input, fdf);
 	mlx_loop(fdf->my_mlx);
-	
+
 	mlx_destroy_window(fdf->my_mlx, fdf->my_mlx_new_win);
 	destroy_map(fdf);
 	free(fdf->my_mlx);

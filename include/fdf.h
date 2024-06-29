@@ -9,9 +9,7 @@
 # include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
-
-# define RAC2 1.414213562
-# define RAC6 2.449489743
+# define PI 3.141592653589793
 
 typedef struct s_2d
 {
@@ -34,17 +32,21 @@ typedef struct s_matrix
 	t_3d	k;
 }			t_matrix;
 
+typedef struct s_map_limits
+{
+	t_2d	min;
+	t_2d	max;
+}				t_map_limits;
+
+
 typedef struct s_bresenham
 {
 	float	dx;
 	float	dy;
 	float	d;
-	int		sx;
-	int		sy;
-	int		error;
+	int		x_incr;
+	int		y_incr;
 	int		color;
-	float	ratio;
-	float	step;
 	float	pixel;
 }			t_bresenham;
 
@@ -59,16 +61,29 @@ typedef struct s_fdf
 	float	move_y;
 	int		max;
 	int		min;
+	float	angle;
 	void	*my_mlx;
 	void	*my_mlx_new_win;
+	//void	*data_add;
+	//void 	*mlx_img; // for mlx_new_image
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
 }			t_fdf;
 
 void		destroy_map(t_fdf *fdf);
 int			bresenham(t_3d *pa, t_3d *pb, t_fdf *fdf);
 void		draw(t_fdf *fdf);
+void		get_points(int x1, int y1, int x2, int y2, t_fdf *fdf);
 void		calcul_bresenham(t_bresenham *var, t_3d *p1, t_3d *p2);
-void		draw_line(int x1, int y1, int x2, int y2, t_fdf *fdf);
+void		draw_line(t_3d p1, t_3d p2, t_fdf *fdf);
+void		draw_pixel_low(t_3d p1, t_3d p2, t_fdf *fdf);
+void		draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf);
 void		projection_2d(t_3d *p);
+t_3d		to_iso(t_3d v);
+int			get_color(char *s);
+int			grad(int color_pa, int color_pb, float delta);
 
 /*		FOR PARSING DATA	*/
 int			open_file(char *file, int *fd, t_fdf *fdf);
@@ -86,9 +101,10 @@ void		set_move(t_3d *p1, t_3d *p2, t_fdf *fdf);
 void		print_map(char ***map);
 
 /*		POUTR CALCUL MATRICIELLE	*/
-// t_matrix			*rot_matrix_x(float alpha);
+t_matrix			rot_matrix_x(float alpha);
 // t_matrix			*rot_matrix_y(float alpha);
-// t_matrix			*rot_matrix_z(float alpha);
+t_matrix			rot_matrix_z(float alpha);
+float				grad_to_rad(float deg);
 // t_matrix			matriz_id(void);
 // t_3d				*to_iso(t_3d *v, t_fdf *fdf);
 // t_3d				*mat_x_vec(t_matrix *m, t_3d *vt);

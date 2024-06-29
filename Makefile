@@ -2,7 +2,7 @@ NAME = fdf
 
 all: ${NAME}
 	@echo "Compilation réussie"
-	
+
 SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 INCLUDE = include
@@ -12,11 +12,11 @@ RM = rm -f
 FLAGS = -ldl -Imlx -L./mlx/ -lm -lbsd -lXext -lX11 -Wl,-rpath=./bass/,-rpath=./mlx/,-rpath=./delay/ -fPIC
 SMAKE = make --no-print-directory
 
-SRC_FILES = fdf get_map parse destroy draw
+SRC_FILES = fdf get_map parse destroy draw get_color mat_operation
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
-	
+
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 
@@ -43,7 +43,7 @@ clean:
 	@$(RM) -r $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_PATH) clean
 	@$(MAKE) -C ./minilibx-linux clean
-	
+
 fclean:	clean
 	@$(RM) $(NAME)
 	@$(SMAKE) -C $(LIBFT_PATH) fclean
@@ -84,7 +84,7 @@ re: fclean all
 # INC_FLAGS = -I$(INC_DIR)
 
 # #	source files
-# SRCS = 	fdf.c destroy.c parse.c get_map.c 
+# SRCS = 	fdf.c destroy.c parse.c get_map.c
 
 # # Objetivos predeterminados
 # all : $(LIBFT) $(PROGNAME)
@@ -99,7 +99,7 @@ re: fclean all
 # # Rules
 # all: $(PROGNAME)
 
-# $(PROGNAME): $(OBJS) $(LIBFT) 
+# $(PROGNAME): $(OBJS) $(LIBFT)
 # 	@ $(CC) $(CFLAGS) $(INC_FLAGS) -o $@ $^
 
 # $(SRC_DIR)/%.o: $(SRC_DIR)/%.c

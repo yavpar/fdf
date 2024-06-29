@@ -6,17 +6,15 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:17:38 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/10 13:54:29 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/06/14 13:02:37 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_2d	projection_2d(t_3d *p)
+void	to_iso(t_3d *p)
 {
-	return((t_2d_point){
-		(p.x - p.z) / sqrt(2),
-		(p.x + (p.y * 2) + p.z) / sqrt(6)
-	});
+		(p->x - p->z) / sqrt(2);
+		(p->x + (p->y * 2) + p->z) / sqrt(6);
 }
 

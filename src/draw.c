@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:32:30 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/13 19:21:51 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:40:38 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,6 @@ void	draw(t_fdf *fdf)
 	int	x;
 	int	y;
 
-	// t_3d	*p;
-	// t_3d	*px;
-	// t_3d	*py;
-	mlx_clear_window(fdf->my_mlx, fdf->my_mlx_new_win);
 	y = 0;
 	while (y < fdf->height)
 	{
@@ -28,9 +24,9 @@ void	draw(t_fdf *fdf)
 		while (x < fdf->width)
 		{
 			if (x < fdf->width - 1)
-				draw_line(x, y, x + 1, y, fdf);
+				get_points(x, y, x + 1, y, fdf);
 			if (y < fdf->height - 1)
-				draw_line(x, y, x, y + 1, fdf);
+				get_points(x, y, x, y + 1, fdf);
 			x++;
 		}
 		y++;
@@ -53,7 +49,7 @@ void	set_move(t_3d *p1, t_3d *p2, t_fdf *fdf)
 	p2->y += fdf->move_y;
 }
 
-void	draw_line(int x1, int y1, int x2, int y2, t_fdf *fdf)
+void	get_points(int x1, int y1, int x2, int y2, t_fdf *fdf)
 {
 	t_3d	p1;
 	t_3d	p2;
@@ -61,76 +57,170 @@ void	draw_line(int x1, int y1, int x2, int y2, t_fdf *fdf)
 	p1.x = x1;
 	p1.y = y1;
 	p1.z = ft_atoi(fdf->map[y1][x1]);
-	if (p1.z == 0)
-		p1.color = 0xffffff;
-	else
-		p1.color = 0xff0000;//get_color(fdf->map[y1][x1], fdf);
-	p1.x = (p1.x - p1.z) / RAC2;
-	p1.y = (p1.x + (p1.y * 2) + p1.z) / RAC6;
+	p1.color = get_color(fdf->map[y1][x1]);
+	p1 = to_iso(p1);
 	p2.x = x2;
 	p2.y = y2;
 	p2.z = ft_atoi(fdf->map[y2][x2]);
-	p2.x = (p2.x - p2.z) / RAC2;
-	p2.y = (p2.x + (p2.y * 2) + p2.z) / RAC6;
-	//p2.color = get_color(fdf->map[y2][x2], fdf);
+	p2 = to_iso(p2);
+	p2.color = get_color(fdf->map[y2][x2]);
 	set_zoom(&p1, &p2, fdf);
 	set_move(&p1, &p2, fdf);
-	bresenham(&p1, &p2, fdf);
+	draw_line(p1, p2, fdf);
+	// bresenham(&p1, &p2, fdf);
 }
-// x0 = (x0 - z0) / RAC2;
-// y0 = (x0 + (y0 * 2) + z0) / RAC6;
-// x1 = (x1 - z1) / RAC2;
-// y1 = (x1 + (y1 * 2) + z1) / rac6;
 
-void	calcul_bresenham(t_bresenham *var, t_3d *p1, t_3d *p2)
+void	draw_line(t_3d p1, t_3d p2, t_fdf *fdf)
 {
-	var->dx = ft_abs(p2->x - p1->x);
-	var->dy = ft_abs(p2->y - p1->y);
-	if (var->dx > var->dy)
-		var->d = var->dx;
+	int	delta_x;
+	int	delta_y;
+
+	delta_x = ft_abs(p2.x - p1.x);
+	delta_y = ft_abs(p2.y - p1.y);
+	if (delta_x > delta_y)
+	{
+		if (p2.x - p1.x > 0)
+			draw_pixel_low(p1, p2, fdf);
+		else
+			draw_pixel_low(p2, p1, fdf);
+	}
 	else
-		var->d = var->dy;
-	if (p1->x < p2->x)
-		var->sx = 1;
-	else
-		var->sx = -1;
-	if (p1->y < p2->y)
-		var->sy = var->error = var->dx - var->dy;
-	var->ratio = 0.0;
-	var->pixel = 0.0;
+	{
+		if (p2.y - p1.y > 0)
+			draw_pixel_high(p1, p2, fdf);
+		else
+			draw_pixel_high(p2, p1, fdf);
+	}
 }
 
-int	bresenham(t_3d *pa, t_3d *pb, t_fdf *fdf)
+void	draw_pixel_low(t_3d p1, t_3d p2, t_fdf *fdf)
 {
 	t_bresenham	var;
-	int			k;
+	t_3d		p0;
 
-	k = -1;
-	calcul_bresenham(&var, pa, pb);
-	while (++k <= var.d)
+	var.dx = p2.x - p1.x;
+	var.dy = p2.y - p1.y;
+	var.y_incr = 1;
+	if (var.dy < 0)
 	{
-		if (var.step == 0)
-			var.ratio = 0.0f;
-		else
-			var.ratio = (float)k / var.step;
-		//var.pixel = color_grad((*pa).color, (*pb).color, var.d);
-		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, pa->x, pa->y,
-			pa->color);
-		if ((pa->x == pb->x) && (pa->y == pb->y))
-			break ;
-		if ((2 * var.error) > -var.dy)
-		{
-			var.error -= var.dy;
-			pa->x += var.sx;
-		}
-		if (2 * var.error < var.dx)
-		{
-			var.error += var.dx;
-			pa->y += var.sy;
-		}
+		var.y_incr = -1;
+		var.dy *= -1;
 	}
-	return (0);
+	var.d = (2 * var.dy) - var.dx;
+	p0.x = p1.x;
+	p0.y = p1.y;
+	while (p0.x <= p2.x)
+	{
+		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, p0.x, p0.y, p1.color);
+		//my_pixel_put();
+		if (var.d > 0)
+		{
+			p0.y += var.y_incr;
+			var.d += var.dx * (-2);
+		}
+		var.d += var.dy * 2;
+		p0.x++;
+	}
 }
+
+void	draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf)
+{
+	t_bresenham	var;
+	t_3d		p0;
+
+	var.dx = p2.x - p1.x;
+	var.dy = p2.y - p1.y;
+	var.x_incr = 1;
+	if (var.dx < 0)
+	{
+		var.x_incr = -1;
+		var.dx *= -1;
+	}
+	var.d = (2 * var.dx) - var.dy;
+	p0.x = p2.x;
+	p0.y = p2.y;
+	while (p0.y <= p1.y)
+	{
+		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, p0.x, p0.y, p1.color);
+		//my_pixel_put();
+		if (var.d > 0)
+		{
+			p0.x += var.x_incr;
+			var.d += var.dy * (-2);
+		}
+		var.d += var.dx * 2;
+		p0.y++;
+	}
+}
+// void	to_iso(t_3d *p)
+// {
+// 	p->x = (p->x - p->y) * cos(0.01);
+// 	p->y = (p->x + p->y) * sin(0.01) - p->z;
+// }
+
+// void	calcul_bresenham(t_bresenham *var, t_3d *pa, t_3d *pb)
+// {
+// 	var->dx = ft_abs(pb->x - pa->x);
+// 	var->dy = ft_abs(pb->y - pa->y);
+// 	if (var->dx > var->dy)
+// 		var->d = var->dx;
+// 	else
+// 		var->d = var->dy;
+// 	var->dx /= var->d;
+// 	var->dy /= var->d;
+// }
+
+// void	put_pixel(t_fdf *fdf, int x, int y, int color)
+// {
+
+// }
+
+// int	bresenham(t_3d *pa, t_3d *pb, t_fdf *fdf)
+// {
+// 	t_bresenham	var;
+
+// 	calcul_bresenham(&var, pa, pb);
+// 	while ((int)(pa->x - pb->x) || (int)(pa->y - pb->y))
+// 	{
+// 		//var.pixel = color_grad((*pa).color, (*pb).color, var.d);
+// 		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, pa->x, pa->y,
+		//	pa->color);
+// 		pa->x += var.dx;
+// 		pa->y += var.dy;
+// 	}
+// 	return (0);
+// }
+
+/*For Bresenham*/
+
+// if (pa->x < pb->x)
+// 	var->sx = 1;
+// else
+// 	var->sx = -1;
+// if (pa->y < pb->y)
+// 	var->sy = var->error = var->dx - var->dy;
+// var->ratio = 0.0;
+// var->pixel = 0.0;
+
+/*--------------------------------------------------------------*/
+// if (var.step == 0)
+// 	var.ratio = 0.0f;
+// else
+// 	var.ratio = (float)k / var.step;
+
+// if ((pa->x == pb->x) && (pa->y == pb->y))
+// 	break ;
+// if ((2 * var.error) > -var.dy)
+// {
+// 	var.error -= var.dy;
+// 	pa->x += var.sx;
+// }
+// if (2 * var.error < var.dx)
+// {
+// 	var.error += var.dx;
+// 	pa->y += var.sy;
+// }
+
 /*
 void	*draw(t_fdf *fdf) {
 	int x, y;
@@ -309,3 +399,8 @@ ft_printf("valores de punteros de t_3d:\np=%p px=%p py=%p", p, px, py);
 // 	}
 // 	return (0);
 // }
+
+// x0 = (x0 - z0) / RAC2;
+// y0 = (x0 + (y0 * 2) + z0) / RAC6;
+// x1 = (x1 - z1) / RAC2;
+// y1 = (x1 + (y1 * 2) + z1) / rac6;
