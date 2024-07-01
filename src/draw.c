@@ -6,11 +6,13 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:32:30 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/29 18:40:38 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/07/01 09:18:25 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+//static void init_image(t_fdf *fdf);
 
 void	draw(t_fdf *fdf)
 {
@@ -31,7 +33,36 @@ void	draw(t_fdf *fdf)
 		}
 		y++;
 	}
+	//render_image(fdf);
 }
+
+// static void init_image(t_fdf *fdf)
+// {
+//     fdf->img = mlx_new_image(fdf->mlx, fdf->width, fdf->height);
+//     fdf->img_data = mlx_get_data_addr(fdf->img, &fdf->bpp, &fdf->line_len, &fdf->endian);
+// }
+
+/*	THIS FUNCTION PUTS THE IMAGE IN THE WINDOW	*/
+// void render_image(t_fdf *fdf)
+// {
+//     init_image(fdf); // Inicializa una nueva imagen.
+//     draw(fdf); // Dibuja todas las líneas en el buffer de la imagen.
+//     mlx_put_image_to_window(fdf->mlx, fdf->mlx_new_win, fdf->img, 0, 0); // Muestra la imagen en la ventana.
+//     mlx_destroy_image(fdf->mlx, fdf->img); // Destruye la imagen para liberar la memoria.
+// }
+
+void	render_image(t_fdf *fdf)
+{
+	mlx_put_image_to_window(fdf->mlx, fdf->mlx_new_win, fdf->img, 0, 0);
+}
+
+/*	TIS FUNCTION MODIFIES DIRECTLY THE BUFFER TO DRAW LINES	*/
+void	put_pixel(t_fdf *fdf, int x, int y, int color)
+{
+	if (x >= 0 && x < fdf->width && y >= 0 && y < fdf->height)
+		fdf->img_data[(x * fdf->bpp / 8) + (y * fdf->line_len)] = color;
+}
+		//fdf->img_data[(y * (fdf->line_len / 4)) + x] = color;
 
 void	set_zoom(t_3d *p1, t_3d *p2, t_fdf *fdf)
 {
@@ -58,16 +89,15 @@ void	get_points(int x1, int y1, int x2, int y2, t_fdf *fdf)
 	p1.y = y1;
 	p1.z = ft_atoi(fdf->map[y1][x1]);
 	p1.color = get_color(fdf->map[y1][x1]);
-	p1 = to_iso(p1);
+	p1 = to_iso(p1, fdf);
 	p2.x = x2;
 	p2.y = y2;
 	p2.z = ft_atoi(fdf->map[y2][x2]);
-	p2 = to_iso(p2);
+	p2 = to_iso(p2, fdf);
 	p2.color = get_color(fdf->map[y2][x2]);
 	set_zoom(&p1, &p2, fdf);
 	set_move(&p1, &p2, fdf);
 	draw_line(p1, p2, fdf);
-	// bresenham(&p1, &p2, fdf);
 }
 
 void	draw_line(t_3d p1, t_3d p2, t_fdf *fdf)
@@ -97,6 +127,14 @@ void	draw_pixel_low(t_3d p1, t_3d p2, t_fdf *fdf)
 {
 	t_bresenham	var;
 	t_3d		p0;
+	t_3d		temp;
+	
+	if (p1.x > p2.x)
+	{
+		temp = p1;
+		p1 = p2;
+		p2 = temp;
+	}
 
 	var.dx = p2.x - p1.x;
 	var.dy = p2.y - p1.y;
@@ -111,8 +149,8 @@ void	draw_pixel_low(t_3d p1, t_3d p2, t_fdf *fdf)
 	p0.y = p1.y;
 	while (p0.x <= p2.x)
 	{
-		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, p0.x, p0.y, p1.color);
-		//my_pixel_put();
+		mlx_pixel_put(fdf->mlx, fdf->mlx_new_win, p0.x, p0.y, p1.color);
+		//put_pixel(fdf, p0.x, p0.y, p1.color);
 		if (var.d > 0)
 		{
 			p0.y += var.y_incr;
@@ -127,7 +165,14 @@ void	draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf)
 {
 	t_bresenham	var;
 	t_3d		p0;
+	t_3d		temp;
 
+	if (p1.y > p2.y)
+	{
+		temp = p1;
+		p1 = p2;
+		p2 = temp;
+	}
 	var.dx = p2.x - p1.x;
 	var.dy = p2.y - p1.y;
 	var.x_incr = 1;
@@ -137,12 +182,12 @@ void	draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf)
 		var.dx *= -1;
 	}
 	var.d = (2 * var.dx) - var.dy;
-	p0.x = p2.x;
-	p0.y = p2.y;
-	while (p0.y <= p1.y)
+	p0.x = p1.x;
+	p0.y = p1.y;
+	while (p0.y <= p2.y)
 	{
-		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, p0.x, p0.y, p1.color);
-		//my_pixel_put();
+		//put_pixel(fdf, p0.x, p0.y, p1.color);
+		mlx_pixel_put(fdf->mlx, fdf->mlx_new_win, p0.x, p0.y, p1.color);
 		if (var.d > 0)
 		{
 			p0.x += var.x_incr;
@@ -183,7 +228,7 @@ void	draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf)
 // 	while ((int)(pa->x - pb->x) || (int)(pa->y - pb->y))
 // 	{
 // 		//var.pixel = color_grad((*pa).color, (*pb).color, var.d);
-// 		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, pa->x, pa->y,
+// 		mlx_pixel_put(fdf->mlx, fdf->mlx_new_win, pa->x, pa->y,
 		//	pa->color);
 // 		pa->x += var.dx;
 // 		pa->y += var.dy;
@@ -226,7 +271,7 @@ void	*draw(t_fdf *fdf) {
 	int x, y;
 	t_3d *p, *px, *py;
 
-	mlx_clear_window(fdf->my_mlx, fdf->my_mlx_new_win);
+	mlx_clear_window(fdf->mlx, fdf->mlx_new_win);
 	y = 0;
 	while (y < fdf->height) {
 		x = 0;
@@ -289,7 +334,7 @@ void	*draw(t_fdf *fdf) {
 	int x, y;
 	t_3d *p, *px, *py;
 
-	mlx_clear_window(fdf->my_mlx, fdf->my_mlx_new_win);
+	mlx_clear_window(fdf->mlx, fdf->mlx_new_win);
 	y = 0;
 	while (y < fdf->height) {
 		x = 0;
@@ -393,7 +438,7 @@ ft_printf("valores de punteros de t_3d:\np=%p px=%p py=%p", p, px, py);
 // 	dy = (float)((dy) / d);
 // 	while ((int)(xa - xb) || (int)(ya - yb))
 // 	{
-// 		mlx_pixel_put(fdf->my_mlx, fdf->my_mlx_new_win, xa, ya, color);
+// 		mlx_pixel_put(fdf->mlx, fdf->mlx_new_win, xa, ya, color);
 // 		xa += dx;
 // 		ya += dy;
 // 	}

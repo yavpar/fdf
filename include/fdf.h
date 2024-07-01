@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/06/30 22:21:36 by yparthen          #+#    #+#             */
+/*   Updated: 2024/07/01 09:58:24 by yparthen         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
@@ -10,6 +20,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # define PI 3.141592653589793
+# define WIDTH 1024
+# define HEIGHT 820
+# define MARGIN 0.8
 
 typedef struct s_2d
 {
@@ -38,7 +51,6 @@ typedef struct s_map_limits
 	t_2d	max;
 }				t_map_limits;
 
-
 typedef struct s_bresenham
 {
 	float	dx;
@@ -61,15 +73,19 @@ typedef struct s_fdf
 	float	move_y;
 	int		max;
 	int		min;
-	float	angle;
-	void	*my_mlx;
-	void	*my_mlx_new_win;
-	//void	*data_add;
-	//void 	*mlx_img; // for mlx_new_image
-	char	*addr;
+	float	ang_x;
+	float	ang_y;
+	float	ang_z;
+	void	*mlx;
+	void	*mlx_new_win;
+	void	*img;
+	char 	*img_data;
 	int		bpp;
 	int		line_len;
 	int		endian;
+	int		rot_z;
+	int		rot_up_down;
+	int		iso;
 }			t_fdf;
 
 void		destroy_map(t_fdf *fdf);
@@ -78,10 +94,12 @@ void		draw(t_fdf *fdf);
 void		get_points(int x1, int y1, int x2, int y2, t_fdf *fdf);
 void		calcul_bresenham(t_bresenham *var, t_3d *p1, t_3d *p2);
 void		draw_line(t_3d p1, t_3d p2, t_fdf *fdf);
+void		render_image(t_fdf *fdf);
 void		draw_pixel_low(t_3d p1, t_3d p2, t_fdf *fdf);
 void		draw_pixel_high(t_3d p1, t_3d p2, t_fdf *fdf);
+void		put_pixel(t_fdf *fdf, int x, int y, int color);
 void		projection_2d(t_3d *p);
-t_3d		to_iso(t_3d v);
+t_3d		to_iso(t_3d v, t_fdf *fdf);
 int			get_color(char *s);
 int			grad(int color_pa, int color_pb, float delta);
 
@@ -92,35 +110,20 @@ int			get_width(char *x_line);
 int			get_map(t_fdf *fdf, int fd);
 int			parse_file(char *file, t_fdf *fdf);
 int			get_map(t_fdf *fdf, int fd);
-// void			data_point(int x, int y, char *s);
 
 /*		NEW FONCTONS		*/
-// t_2d			projection_2d(t_3d *p);
 void		set_zoom(t_3d *p1, t_3d *p2, t_fdf *fdf);
 void		set_move(t_3d *p1, t_3d *p2, t_fdf *fdf);
+void		center_n_scale(t_fdf *fdf);
 void		print_map(char ***map);
+void		ft_clear(t_fdf *fdf, int is_exit);
+int			close_window(t_fdf *fdf);
 
 /*		POUTR CALCUL MATRICIELLE	*/
 t_matrix			rot_matrix_x(float alpha);
-// t_matrix			*rot_matrix_y(float alpha);
+t_matrix			rot_matrix_y(float alpha);
 t_matrix			rot_matrix_z(float alpha);
+t_3d				rot_map(t_3d v, t_fdf *fdf);
 float				grad_to_rad(float deg);
-// t_matrix			matriz_id(void);
-// t_3d				*to_iso(t_3d *v, t_fdf *fdf);
-// t_3d				*mat_x_vec(t_matrix *m, t_3d *vt);
-// enum	color_pos
-// {
-// 	0X00FFFF,0XAFEEEE, // BLUE
-// 	0X00FF00,0XADFF2F, // GREEN
-// 	0xFFFF00, 0xFFD700, // YELLOW, ORANGE
-// 	0XFF0000, 0XCD5C5C // RED, INDIAN RED
-// }		clr_pos;
 
-// enum	color_neg
-// {
-// 	0X1E90FF, 0X0000FF // BLUE ,BLUE FONCE
-// 	0X7B68EE, 0X4B0082 //MediumSlateBlue, INDIGO
-// 	0XFF00FF, 0XDC143C// MAGENTA, Crimson
-// 	0XFF1493, 0XC71585 // DEEP-PINK, MediumVioletRed
-// }		clr_neg;
 #endif
