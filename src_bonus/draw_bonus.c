@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   draw_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:32:30 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/01 15:47:20 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:27:27 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
-/*	THIS FUNCUTION FILLS ONE ADDRESS OF THE BUFFER IMAGE WITH THE PIXEL */
-void pixel_put_to_image(t_fdf *fdf, int x, int y, int pixel)
+/*	THIS FUNCUTION FILLS THE BUFFER WITH THE PIXELS	*/
+void pixel_put_to_image(t_fdf *fdf, int x, int y, int color)
 {
 	int i;
-
-	i = (x * (fdf->bpp / 8)) + (y * fdf->line_len);
-	if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-		*(unsigned int *)(fdf->img_data + i) = pixel;
+	
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
+	{
+		i = (x * (fdf->bpp / 8)) + (y * fdf->line_len);
+		if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
+		{			
+			fdf->img_data[i] = color & 0xFF;
+			fdf->img_data[++i] = (color >> 8) & 0xFF;
+			fdf->img_data[++i] = (color >> 16) & 0xFF;
+		}
+	}
 }
 
 /*	THIS FUNCUTION FILLS THE WINDOW WITH BLACK COLOR	*/
@@ -49,11 +56,12 @@ void	clear_image(t_fdf *fdf)
 }
 
 /*	THIS FUNCTION CALCULATES THE PARAMETERS IN ORDER TO DRAWING	*/
-/*	A LINE BETWEEN TWO POINTS WITH DDA ALGORITHM				*/
+/*	A LINE BETWEEN TWO POINTS WITH DDA ALGORITHM			*/
 void draw_pixels(t_3d p1, t_3d p2, t_fdf *fdf)
 {
 	t_bresenham	var;
 	t_3d	p0;
+	float	factor;
 	
 	var.dx = p2.x - p1.x;
 	var.dy = p2.y - p1.y;
@@ -65,7 +73,9 @@ void draw_pixels(t_3d p1, t_3d p2, t_fdf *fdf)
 	p0.y = p1.y;
 	while (var.i <= var.steps)
 	{
-		pixel_put_to_image(fdf, round(p0.x), round(p0.y), p1.color);
+		factor = (float)var.i / var.steps;
+		var.pixel = interpolate_color(p1.color, p2.color, factor);
+		pixel_put_to_image(fdf, round(p0.x), round(p0.y), var.pixel);
 		p0.x += var.x_incr;
 		p0.y += var.y_incr;
 		var.i++;
@@ -78,14 +88,14 @@ void	draw_lines(int x1, int y1, int x2, int y2, t_fdf *fdf)
 {
 	t_3d	p1;
 	t_3d	p2;
-
+	
 	p1.x = x1;
 	p1.y = y1;
-	p1.z = ft_atoi(fdf->map[y1][x1]) * 0.3;
+	p1.z = ft_atoi(fdf->map[y1][x1]) * fdf->pad;
 	p1.color = get_color(fdf->map[y1][x1], fdf);
 	p2.x = x2;
 	p2.y = y2;
-	p2.z = ft_atoi(fdf->map[y2][x2]) * 0.3;
+	p2.z = ft_atoi(fdf->map[y2][x2]) * fdf->pad;
 	p2.color = get_color(fdf->map[y2][x2], fdf);
 	p1 = to_iso(p1, fdf);
 	p2 = to_iso(p2, fdf);

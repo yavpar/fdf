@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   fdf_bonus.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 22:21:36 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/03 21:41:35 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/03 21:41:19 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 # define WIDTH 1500
 # define HEIGHT 1024
 # define ZOOM_FACTOR 400
-# define BACKGROUND 0xffffff
 # define BUFFER 1024
-# define TEXT_COLOR 0xddbe43
+# define TEXT 0x76d7c4 //1f618d//ddbe43
+# define BLACK 0x000000
 # define WHITE 0xffffff
 
 typedef struct 	s_2d
@@ -100,6 +100,7 @@ typedef struct s_fdf
 	int			bonus;
 	int			left_view;
 	int			right_view;
+	float		pad;
 }			t_fdf;
 
 /*	FOR PARSING FILE	*/
@@ -117,6 +118,8 @@ int			draw(t_fdf *fdf);
 t_3d		to_iso(t_3d v, t_fdf *fdf);
 int			get_color(char *s, t_fdf *fdf);
 int 		interpolate_color(int color1, int color2, float factor);
+void		clear_image(t_fdf *fdf);
+void 		pixel_put_to_image(t_fdf *fdf, int x, int y, int color);
 
 /*	FOR INTERACT WITH THE PROGRAM	*/
 int			input(int keysym, t_fdf *fdf);

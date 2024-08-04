@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:57:12 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 11:38:42 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/02 10:51:31 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 /*	THIS FUNCION VERIFIES THE NAME AND THE EXTENTION	*/
 /*	OF THE FILE <FILENAME.FDF>							*/

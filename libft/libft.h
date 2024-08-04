@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 14:42:24 by yparthen          #+#    #+#             */
-/*   Updated: 2024/06/12 15:55:39 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/07/28 09:29:05 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlen(const char *s);
 char				*ft_strnstr(const char *big, const char *little,
 						size_t len);
-int					ft_strncmp(const char *s1, const char *s2, size_t n);
+int					ft_strncmp(char *s1, char *s2, size_t n);
 char				*ft_strrchr(const char *s, int c);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
@@ -72,13 +72,15 @@ char				*ft_strdup(const char *s);
 char				*ft_substr(const char *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
-char				**ft_split(char *s, char c);
+char				**ft_split(char *s);
 char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_striteri(char *s, void (*f)(unsigned int, char *));
 int					ft_putchar(char c);
 void				ft_free(void *data);
 int					ft_wc(char *s);
 int					str_in_str(char *src, char *str);
+void				ft_putstr_fd(char *s, int fd);
+void	ft_putchar_fd(char c, int fd);
 
 /*	FOR PRINTF: to print %[+#' '][csdiuXxp]		*/
 

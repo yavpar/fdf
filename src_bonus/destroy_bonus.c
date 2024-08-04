@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   destroy_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:56:56 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 11:20:20 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/02 10:43:32 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "fdf_bonus.h"
 
 /*	THIS FUNCTION DESTROY THE WINDOW AND FREES THE 3D ARRAY		*/
 void	ft_clear(t_fdf *fdf, int is_exit, int exit_code)
@@ -48,14 +48,14 @@ void	destroy_map(t_fdf *fdf)
 	if (fdf->map)
 	{
 		y = 0;
-		while (y < fdf->height)
+		while (y < fdf->height || fdf->map[y] != NULL)
 		{
-			if (fdf->map[y])
+			if (fdf->map[y] != NULL)
 			{
 				x = 0;
-				while (x < fdf->width)
+				while (x < fdf->width || fdf->map[y][x] != NULL)
 				{
-					if (fdf->map[y][x])
+					if (fdf->map[y][x] != NULL)
 						free(fdf->map[y][x]);
 					x++;
 				}

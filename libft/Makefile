@@ -6,50 +6,57 @@
 #    By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 14:44:05 by yparthen          #+#    #+#              #
-#    Updated: 2024/06/12 16:03:03 by yparthen         ###   ########.fr        #
+#    Updated: 2024/08/04 12:13:00 by yparthen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-SRC =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_putchar.c \
-		ft_isprint.c ft_strlen.c  ft_bzero.c ft_print_str.c \
-		ft_strlcpy.c ft_strlcat.c ft_printf.c \
-		ft_toupper.c ft_tolower.c ft_strchr.c ft_strrchr.c ft_print_ptr.c \
-		ft_strncmp.c  ft_strnstr.c ft_print_int.c \
-		ft_calloc.c ft_strdup.c ft_substr.c ft_len_tab.c str_in_str.c \
-		ft_strjoin.c ft_strtrim.c ft_split.c ft_itoa.c ft_print_char.c \
-		ft_strmapi.c ft_striteri.c \
-		ft_outil_printf.c ft_char_in_str.c\
-		ft_lstnew.c ft_lstadd_front.c ft_free_array.c ft_abs.c ft_atol.c \
-		ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c ft_atoi.c \
-		ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_print_hexadecimal.c \
-		ft_print_unsigned.c get_next_line.c get_next_line_utils.c ft_wc.c \
-		ft_max.c ft_min.c ft_htoi.c
+SRC_DIR = src/
+OBJS_DIR = objs/
 
+SRC_FILES =	ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_putchar \
+		ft_isprint ft_strlen  ft_bzero ft_print_str \
+		ft_strlcpy ft_strlcat ft_printf \
+		ft_toupper ft_tolower ft_strchr ft_strrchr ft_print_ptr \
+		ft_strncmp  ft_strnstr ft_print_int \
+		ft_calloc ft_strdup ft_substr ft_len_tab str_in_str \
+		ft_strjoin ft_strtrim ft_split ft_itoa ft_print_char \
+		ft_strmapi ft_striteri ft_putstr_fd\
+		ft_outil_printf ft_char_in_str\
+		ft_lstnew ft_lstadd_front ft_free_array ft_abs ft_atol \
+		ft_lstsize ft_lstlast ft_lstadd_back ft_lstdelone ft_atoi \
+		ft_lstclear ft_lstiter ft_lstmap ft_print_hexadecimal \
+		ft_print_unsigned get_next_line get_next_line_utils ft_wc \
+		ft_max ft_min ft_htoi ft_putchar_fd
+
+SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ = $(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRC_FILES)))
 CC	=	clang
 CFLAGS	=	-Wall -Wextra -Werror -I.
 
-OBJ =    $(SRC:.c=.o)
-
 all : $(NAME)
+	@echo "libft compiled"
 
 $(NAME) : $(OBJ)
-	@ ar rcv $@ $^
+	@ar rc $@ $^
 
-%.o : %.c
-	@ $(CC) $(CFLAGS) -c $< -o $@
+$(OBJS_DIR):
+	@mkdir -p $(OBJS_DIR)
+
+$(OBJS_DIR)%.o: $(SRC_DIR)%.c | $(OBJS_DIR)
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
-	@ rm -rf $(OBJ)
+	@rm -rf $(OBJS_DIR)
 
 fclean : clean
-	@ rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 re : fclean all
 
-# so:
-# 	@ $(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
-# 	@ gcc -nostartfiles -shared -o libft.so $(OBJ)
+so:
+	@ $(CC) -nostartfiles -fPIC $(CFLAGS) $(SRC)
+	@ gcc -nostartfiles -shared -o libft.so $(OBJ)
 
 .PHONY : re clean fclean so all
