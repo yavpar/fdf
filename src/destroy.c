@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:56:56 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 11:20:20 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 09:57:02 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ void	destroy_map(t_fdf *fdf)
 	if (fdf->map)
 	{
 		y = 0;
-		while (y < fdf->height)
+		while (fdf->map[y] != NULL)
 		{
 			if (fdf->map[y])
 			{
 				x = 0;
-				while (x < fdf->width)
+				while (fdf->map[y][x] != NULL)
 				{
 					if (fdf->map[y][x])
 						free(fdf->map[y][x]);

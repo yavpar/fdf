@@ -6,7 +6,7 @@
 #    By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/13 14:44:05 by yparthen          #+#    #+#              #
-#    Updated: 2024/08/04 12:13:00 by yparthen         ###   ########.fr        #
+#    Updated: 2024/08/04 18:34:20 by yparthen         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ SRC_FILES =	ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_putchar \
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRC_FILES)))
 CC	=	clang
-CFLAGS	=	-Wall -Wextra -Werror -I.
+CFLAGS	=	-Wall -Wextra -Werror -fPIC -I.
 
 all : $(NAME)
 	@echo "libft compiled"

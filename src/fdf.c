@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:56:39 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/03 21:42:23 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:26:41 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 /*	THE IMAGE SHOWN IS IN ISOMETRIC PROJECTION								*/
 /*	ITS USES MLX LIBRARY IN ORDER TO CREAT A WINDOW TO DRAW THE LINES		*/
 /* ************************************************************************ */
-int	main(int ac, char **av) 
+int	main(int ac, char **av)
 {
 	t_fdf	*fdf;
 
@@ -40,7 +40,6 @@ int	main(int ac, char **av)
 		ft_putstr_fd("FDF: Error malloc for main struct\n", 2);
 		return (1);
 	}
-	fdf->bonus = 0;
 	parse_file(av[1], fdf);
 	init_variables(fdf);
 	ft_mlx_init(fdf, av[1]);

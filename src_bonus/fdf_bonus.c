@@ -6,10 +6,9 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 14:23:59 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/03 21:42:07 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 12:05:02 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "fdf_bonus.h"
 
@@ -25,6 +24,13 @@
 /*	THE IMAGE SHOWN IS IN ISOMETRIC PROJECTION								*/
 /*	ITS USES MLX LIBRARY IN ORDER TO CREAT A WINDOW TO DRAW THE LINES		*/
 /* ************************************************************************ */
+/*	THIS FUNCTION CLOSE THE PROGAM WHEN X BUTTOM WINDOW IS CLICKED	*/
+static int	button_x_close(t_fdf *fdf)
+{
+	ft_clear(fdf, 1, 0);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_fdf	*fdf;
@@ -41,7 +47,6 @@ int	main(int ac, char **av)
 		ft_putstr_fd("FDF: Error malloc for main struct\n", 2);
 		return (1);
 	}
-	fdf->bonus = 1;
 	parse_file(av[1], fdf);
 	init_variables(fdf);
 	ft_mlx_init(fdf, av[1]);
@@ -52,22 +57,4 @@ int	main(int ac, char **av)
 	ft_clear(fdf, 1, 0);
 	return (0);
 }
-/*/
-void	print_map(char ***map)
-{
-	int	y;
-	int	x;
 
-	y = 0;
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			ft_printf(" %s ", map[y][x]);
-			x++;
-		}
-		y++;
-		ft_printf("\n");
-	}
-}*/

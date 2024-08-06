@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:57:12 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 11:38:42 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:22:41 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,21 @@
 static int	valid_file(char *file)
 {
 	int	len;
-	
+
 	len = ft_strlen(file);
 	if (len > 4)
 	{
-		if (ft_strncmp(&file[len - 4], ".fdf", 4)== 0)
+		if (ft_strncmp(&file[len - 4], ".fdf", 4) == 0)
 			return (1);
 	}
 	return (0);
 }
 
 /*	THIS FUNCTION OPEND THE FILE AND RETURNS THE FILE DESCRIPTOR	*/
-int	open_file(char *file, int *fd)
+int	open_file(char *file)
 {
+	int	fd;
+
 	if (valid_file(file) == 0)
 	{
 		ft_putstr_fd("FDF: Error opening file: ", 2);
@@ -37,8 +39,8 @@ int	open_file(char *file, int *fd)
 		ft_putstr_fd("\nIncorrect format. Expected <filename.fdf>\n", 2);
 		return (0);
 	}
-	*fd = open(file, O_RDONLY);
-	if (*fd == -1)
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
 	{
 		ft_putstr_fd("FDF: Error opening file: ", 2);
 		ft_putstr_fd(file, 2);
@@ -48,18 +50,18 @@ int	open_file(char *file, int *fd)
 			ft_putstr_fd("\nAcces not granted\n", 2);
 		return (0);
 	}
-	return (*fd);
+	close(fd);
+	return (1);
 }
 
 /*	THIS FUNCION COUNTS THE NUMBER OF ROWS IN THE FILE	*/
-static int	get_height(char	*y_file)
+static int	get_height(char *file, int fd)
 {
-	int	y;
+	int		y;
 	char	*y_line;
-	int	fd;
 
 	y = 0;
-	fd = open(y_file, O_RDONLY);
+	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		return (0);
 	y_line = get_next_line(fd);
@@ -75,67 +77,58 @@ static int	get_height(char	*y_file)
 			free(y_line);
 	}
 	else
-		ft_putstr_fd("FDF: Error get_height()\n", 2);	
+		ft_putstr_fd("FDF: Error get_height()\n", 2);
 	close(fd);
 	return (y);
 }
 
 /*	THIS FUNCION COUNTS THE NUMBER OF COLUMNS	*/
-static int	get_width(char *x_file)
+static void	malloc_lines(t_fdf *fdf, char *file, int fd)
 {
-	int	temp_len;
-	int	str_len;
-	char *x_line;
-	int	fd;
-	
-	fd = open(x_file, O_RDONLY);
+	char	*x_line;
+	int		line_len;
+	int		y;
+
+	fd = open(file, O_RDONLY);
 	x_line = get_next_line(fd);
 	if (!x_line)
-		return (ft_putstr_fd("FDF: Error get_width()\n", 2), 0);
-	else
+		fatal_error("FDF: Error gnl()\n", fdf);
+	y = 0;
+	while (y < fdf->height)
 	{
-		str_len = ft_wc(x_line);
-		while (x_line)
-		{
-			temp_len = ft_wc(x_line);
-			free(x_line);
-			if (temp_len != str_len)
-				return (0); 
-			x_line = get_next_line(fd);
-		}
-		if (x_line)
-			free(x_line);
+		line_len = ft_wc(x_line);
+		fdf->map[y] = ft_calloc((line_len + 1), sizeof(char *));
+		if (fdf->map == NULL)
+			fatal_error("FDF: Error malloc()\n", fdf);
+		free(x_line);
+		if (line_len > fdf->width)
+			fdf->width = line_len;
+		x_line = get_next_line(fd);
+		y++;
 	}
+	if (x_line)
+		free(x_line);
 	close(fd);
-	return (str_len);
 }
 
 /*	THIS FUNCION READS THE FILE AND MALLOC AND 3D ARRAY		*/
 /*	WITH INFORMATION OF THE FILE: X, Y AND Z COORDINATES	*/
-int parse_file(char *file, t_fdf *fdf)
+int	parse_file(char *file, t_fdf *fdf)
 {
-    int fd;
-    int k;
-	
-    if (open_file(file, &fd) == 0) 
+	int	fd;
+
+	fd = -1;
+	if (open_file(file) == 0)
 		ft_clear(fdf, 1, 1);
-    fdf->height = get_height(file);
-    fdf->width = get_width(file);
-    if (fdf->height < 1 || fdf->width < 2)
-		fatal_error("FDF: Wrong file format\n", fdf);
-    fdf->map = ft_calloc((fdf->height + 1), sizeof(char **));
-    if (fdf->map == NULL) 
+	fdf->min = INT_MAX;
+	fdf->max = INT_MIN;
+	fdf->height = get_height(file, fd);
+	fdf->width = 0;
+	fdf->map = ft_calloc((fdf->height + 1), sizeof(char **));
+	if (fdf->map == NULL)
 		fatal_error("FDF: Error malloc()\n", fdf);
-	k = 0;
-	while (k < fdf->height)
-	{
-        fdf->map[k] = ft_calloc((fdf->width + 1), sizeof(char *));
-        if (fdf->map[k] == NULL)
-			fatal_error("FDF: Error malloc()\n", fdf);
-		k++;
-	}
-    if (get_map(fdf, fd) != 0)
+	malloc_lines(fdf, file, fd);
+	if (get_map(fdf, file, fd) != 0)
 		ft_clear(fdf, 1, 1);
-    close(fd);
-    return 0;
+	return (0);
 }

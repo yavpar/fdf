@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 19:48:29 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 14:27:21 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/04 17:04:44 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ static int	merge_color(int color)
 }
 
 /*	THIS FUNCTION RETURNS THE COLOR INTERPOLATED BETWEEN TWO COLORS	*/
-int interpolate_color(int color1, int color2, float factor)
+int	interpolate_color(int color1, int color2, float factor)
 {
-	t_color col1;
-	t_color col2;
-	t_color result;
+	t_color	col1;
+	t_color	col2;
+	t_color	result;
 
 	col1.red = (color1 >> 16) & 0xFF;
 	col1.green = (color1 >> 8) & 0xFF;
@@ -46,13 +46,11 @@ int interpolate_color(int color1, int color2, float factor)
 /*	BETWEEN RED AND BLUE IF THE FILE HAS A COLOR IT RETURNS IT 		*/
 int	get_color(char *s, t_fdf *fdf)
 {
-	int	k;
-	float factor;
-	int color1;
-	int color2;
-	
-	// color1 = 0xCCFFFF;
-	// color2 = 0xFF99CC;
+	int		k;
+	float	factor;
+	int		color1;
+	int		color2;
+
 	color1 = 0x0000ff;
 	color2 = 0xff0000;
 	k = ft_char_in_str(s, ',');
@@ -61,7 +59,7 @@ int	get_color(char *s, t_fdf *fdf)
 		k++;
 		return (merge_color(ft_htoi(&s[k])));
 	}
-	if (fdf->max == fdf->min) 
+	if (fdf->max == fdf->min)
 		return (color2);
 	factor = (float)(ft_atoi(s) - fdf->min) / (fdf->max - fdf->min);
 	return (interpolate_color(color1, color2, factor));

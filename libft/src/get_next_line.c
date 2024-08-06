@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 11:21:14 by yparthen          #+#    #+#             */
-/*   Updated: 2024/03/24 10:24:38 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 08:43:01 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char	*get_next_line(int fd)
 	static t_list	*buffer = NULL;
 	char			*new_line;
 
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &new_line, 0 < 0))
+	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, &new_line, 0))
 		return (NULL);
 	create_list(&buffer, fd);
 	if (buffer == NULL)

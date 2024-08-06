@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 09:36:27 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/02 11:06:42 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:31:16 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 /*	THIS FUNCTION CHECKS IF ITS A VALID CHARACTER	*/
 static int	valid_chars(char data)
 {
-	char *chars;
-	
+	char	*chars;
+
 	chars = "0123456789abcdefxABCDEFX,";
 	while (*chars != '\0')
 	{
@@ -31,7 +31,7 @@ static int	valid_chars(char data)
 
 /*	THIS FUNCION VERIFIES THAT THE FILE HAVE	*/
 /*	VALID CHARACTERS FOR THE PROGRAM			*/
-int	valid_entry(char *data)
+static int	valid_entry(char *data)
 {
 	long	val;
 
@@ -49,7 +49,7 @@ int	valid_entry(char *data)
 	return (1);
 }
 
-void	find_max_min(t_fdf *fdf, char *dest)
+static void	find_max_min(t_fdf *fdf, char *dest)
 {
 	int	val;
 
@@ -63,7 +63,7 @@ void	find_max_min(t_fdf *fdf, char *dest)
 static int	fill_map(char **dest, char **src, t_fdf *fdf)
 {
 	int	k;
-	
+
 	k = 0;
 	while (src[k])
 	{
@@ -75,7 +75,7 @@ static int	fill_map(char **dest, char **src, t_fdf *fdf)
 		}
 		if (src[k][0] != ' ' && src[k][0] != '\n' && src[k] != NULL)
 		{
-			dest[k]= ft_strdup(src[k]);
+			dest[k] = ft_strdup(src[k]);
 			find_max_min(fdf, dest[k]);
 			free(src[k]);
 		}
@@ -85,18 +85,17 @@ static int	fill_map(char **dest, char **src, t_fdf *fdf)
 }
 
 /*	THIS FUNCION FILLS THE MAP */
-int	get_map(t_fdf *fdf, int fd)
+int	get_map(t_fdf *fdf, char *file, int fd)
 {
 	int		x;
 	int		y;
 	char	*line;
 	char	**map_line;
 
+	fd = open(file, O_RDONLY);
 	line = get_next_line(fd);
 	y = 0;
 	x = 0;
-	fdf->min = INT_MAX;
-	fdf->max = INT_MIN;
 	while (line)
 	{
 		map_line = ft_split(line);
@@ -111,5 +110,6 @@ int	get_map(t_fdf *fdf, int fd)
 	}
 	fdf->map[y] = NULL;
 	free(line);
+	close(fd);
 	return (0);
 }

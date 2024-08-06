@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 13:58:23 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/03 21:39:51 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 13:41:27 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,55 +14,80 @@
 
 /*	THE FIRST 3 FONCTIONS MODIFYS THE PARAMETERS NECESSARY TO DRAW 	*/
 /*	THE NEW LINES													*/
-static void	input3(int keysym, t_fdf *fdf)
+
+static void	input4(int keysym, t_fdf *fdf)
 {
-	if (keysym == 120)
+	if (keysym == XK_y)
 	{
-		fdf->ang_x = -PI / 2;
+		fdf->paralelle_y = 1;
+		fdf->ang_y = -PI / 2;
+		fdf->ang_z = PI / 2;
+		fdf->ang_x = 0;
+		fdf->paralelle_x = 0;
 		fdf->rotation = 0;
 		fdf->iso = 0;
-		fdf->right_view = 0;
-		fdf->left_view = 1;
 	}
-	else if (keysym == 121)
+	else if (keysym == XK_t)
 	{
+		fdf->rotation = 0;
+		fdf->iso = 0;
+		fdf->paralelle_x = 0;
+		fdf->paralelle_y = 0;
+	}
+}
+
+static void	input3(int keysym, t_fdf *fdf)
+{
+	if (keysym == 65436)
+	{
+		fdf->ang_x -= 0.1;
+		fdf->rotation = 1;
+	}
+	else if (keysym == 65435)
+	{
+		fdf->rotation = 1;
+	 	fdf->ang_y -= 0.1;
+	}
+	else if (keysym == 65429)
+	{
+		fdf->rotation = 1;
+		fdf->ang_y += 0.1;
+	}
+	if (keysym == XK_x)
+	{
+		fdf->paralelle_x = 1;
+		fdf->ang_x = PI / 2;
 		fdf->ang_z = PI / 2;
 		fdf->rotation = 0;
 		fdf->iso = 0;
-		fdf->left_view = 0;
-		fdf->right_view = 1;
 	}
-	else if (keysym == XK_f)
-	{
-		fdf->rotation = 0;
-		fdf->iso = 0;
-		fdf->left_view = 0;
-		fdf->right_view = 0;
-	}
+	else
+		input4(keysym, fdf);
 }
 
 static void	input2(int keysym, t_fdf *fdf)
 {
-	fdf->rotation = 1;
-	fdf->iso = 0;
-	fdf->left_view = 0;
-	fdf->right_view = 0;
-	if (keysym == 65436)
-		fdf->ang_x -= 0.1;
-	else if (keysym == 65434)
-		fdf->ang_x += 0.1;
-	else if (keysym == 65435)
-		fdf->ang_y -= 0.1;
-	else if (keysym == 65429)
-		fdf->ang_y += 0.1;
-	else if (keysym == 65430)
-		fdf->ang_z += 1.0;
-	else if (keysym == 65432)
-		fdf->ang_z -= 1.0;
-	else if (keysym == XK_i)
+	if (keysym == XK_i)
 	{
+		fdf->iso = 1;
+		fdf->ang_x = atan(sqrt(2));
+		fdf->ang_z = 30;
 		fdf->rotation = 0;
-		fdf->iso = 1;	
+	}
+	else if (keysym == 65430)
+	{
+		fdf->rotation = 1;
+		fdf->ang_z += 1.0;
+	}
+	else if (keysym == 65432)
+	{
+		fdf->rotation = 1;
+		fdf->ang_z -= 1.0;
+	}
+	else if (keysym == 65434)
+	{
+		fdf->rotation = 1;
+		fdf->ang_x += 0.1;
 	}
 	else
 		input3(keysym, fdf);
@@ -72,7 +97,7 @@ int	input(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Escape)
 		ft_clear(fdf, 1, 0);
-	else if (keysym == XK_w || keysym == XK_Up || keysym == 122)
+	else if (keysym == XK_w || keysym == XK_Up)
 		fdf->move_y -= 5;
 	else if (keysym == XK_s || keysym == XK_Down || keysym == 115)
 		fdf->move_y += 5;
@@ -92,13 +117,6 @@ int	input(int keysym, t_fdf *fdf)
 		input2(keysym, fdf);
 	mlx_clear_window(fdf->mlx, fdf->mlx_win);
 	draw(fdf);
-	return (0);
-}
-
-/*	THIS FUNCTION CLOSE THE PROGAM WHEN X BUTTOM WINDOW IS CLICKED	*/
-int	button_x_close(t_fdf *fdf)
-{
-	ft_clear(fdf, 1, 0);
 	return (0);
 }
 

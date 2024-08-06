@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_pixel_bonus.c                                 :+:      :+:    :+:   */
+/*   pixel_to_image.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 18:56:18 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/04 17:07:29 by yparthen         ###   ########.fr       */
+/*   Created: 2024/06/10 13:17:38 by yparthen          #+#    #+#             */
+/*   Updated: 2024/08/04 16:23:26 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf_bonus.h"
+#include "fdf.h"
 
-/*	THIS FUNCUTION FILLS THE BUFFER WITH THE PIXELS	*/
-void	pixel_put_to_image(t_fdf *fdf, int x, int y, int color)
+/*	THIS FUNCUTION FILLS ONE ADDRESS OF THE BUFFER IMAGE WITH THE PIXEL */
+void	pixel_put_to_image(t_fdf *fdf, int x, int y, int pixel)
 {
 	int	i;
 
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
-		i = (x * (fdf->bpp / 8)) + (y * fdf->line_len);
-		if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-		{
-			fdf->img_data[i] = color & 0xFF;
-			fdf->img_data[++i] = (color >> 8) & 0xFF;
-			fdf->img_data[++i] = (color >> 16) & 0xFF;
-		}
-	}
+	i = (x * (fdf->bpp / 8)) + (y * fdf->line_len);
+	if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
+		*(unsigned int *)(fdf->img_data + i) = pixel;
 }
 
-/*	THIS FUNCUTION FILLS THE BUFFER WITH BLACK COLOR	*/
+/*	THIS FUNCUTION FILLS THE WINDOW WITH BLACK COLOR	*/
 void	clear_image(t_fdf *fdf)
 {
 	int	x;
@@ -46,7 +39,7 @@ void	clear_image(t_fdf *fdf)
 			{
 				i = (x * (fdf->bpp / 8)) + (fdf->line_len * y);
 				if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-					*(unsigned int *)(fdf->img_data + i) = BLACK;
+					*(unsigned int *)(fdf->img_data + i) = 0;
 			}
 			++x;
 		}

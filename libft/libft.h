@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/12 14:42:24 by yparthen          #+#    #+#             */
-/*   Updated: 2024/07/28 09:29:05 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:38:59 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void				ft_free(void *data);
 int					ft_wc(char *s);
 int					str_in_str(char *src, char *str);
 void				ft_putstr_fd(char *s, int fd);
-void	ft_putchar_fd(char c, int fd);
+void				ft_putchar_fd(char c, int fd);
 
 /*	FOR PRINTF: to print %[+#' '][csdiuXxp]		*/
 

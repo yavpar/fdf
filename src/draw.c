@@ -6,55 +6,18 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:32:30 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/01 15:47:20 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:29:55 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/*	THIS FUNCUTION FILLS ONE ADDRESS OF THE BUFFER IMAGE WITH THE PIXEL */
-void pixel_put_to_image(t_fdf *fdf, int x, int y, int pixel)
+/*	THIS FUNCTION CALCULATE THE POSITIONS TO PUT A PIXEL IN THE LINE	*/
+void	draw_pixels(t_3d p1, t_3d p2, t_fdf *fdf)
 {
-	int i;
-
-	i = (x * (fdf->bpp / 8)) + (y * fdf->line_len);
-	if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-		*(unsigned int *)(fdf->img_data + i) = pixel;
-}
-
-/*	THIS FUNCUTION FILLS THE WINDOW WITH BLACK COLOR	*/
-void	clear_image(t_fdf *fdf)
-{
-	int	x;
-	int	y;
-	int	i;
-
-	y = 0;
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-			{
-				i = (x * (fdf->bpp / 8)) + (fdf->line_len * y);
-				if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-					*(unsigned int *)(fdf->img_data + i) = 0;
-			}
-			++x;
-		}
-		++y;
-	}
-	mlx_put_image_to_window(fdf->mlx, fdf->mlx_win, fdf->img, 0, 0);
-}
-
-/*	THIS FUNCTION CALCULATES THE PARAMETERS IN ORDER TO DRAWING	*/
-/*	A LINE BETWEEN TWO POINTS WITH DDA ALGORITHM				*/
-void draw_pixels(t_3d p1, t_3d p2, t_fdf *fdf)
-{
-	t_bresenham	var;
+	t_line	var;
 	t_3d	p0;
-	
+
 	var.dx = p2.x - p1.x;
 	var.dy = p2.y - p1.y;
 	var.steps = ft_max(ft_abs(var.dx), ft_abs(var.dy));
@@ -72,23 +35,22 @@ void draw_pixels(t_3d p1, t_3d p2, t_fdf *fdf)
 	}
 }
 
-/*	THIS FUNCTION INITIALIZES TWO VECTORS POINT AND DRAW ONE LINE	*/
-/*	BETWEEN THE TWO POINTS											*/
-void	draw_lines(int x1, int y1, int x2, int y2, t_fdf *fdf)
+/*	THIS FUNCION GENERATES A VECTOR POINT AND APLY AN ISOMETRIC VIEW	*/
+t_3d	get_point(int x, int y, t_fdf *fdf)
 {
-	t_3d	p1;
-	t_3d	p2;
+	t_3d	p;
 
-	p1.x = x1;
-	p1.y = y1;
-	p1.z = ft_atoi(fdf->map[y1][x1]) * 0.3;
-	p1.color = get_color(fdf->map[y1][x1], fdf);
-	p2.x = x2;
-	p2.y = y2;
-	p2.z = ft_atoi(fdf->map[y2][x2]) * 0.3;
-	p2.color = get_color(fdf->map[y2][x2], fdf);
-	p1 = to_iso(p1, fdf);
-	p2 = to_iso(p2, fdf);
+	p.x = x;
+	p.y = y;
+	p.z = ft_atoi(fdf->map[y][x]) * fdf->pad;
+	p.color = get_color(fdf->map[y][x], fdf);
+	return (to_iso(p, fdf));
+}
+
+/*	THIS FUNCTION APLIES A ZOOM FACTOR AND MOVES THE IMAGE	*/
+/*	THEN IT DRAW A LINE BETWEENT TWO POINTS					*/
+void	draw_lines(t_3d p1, t_3d p2, t_fdf *fdf)
+{
 	p1.x *= fdf->zoom;
 	p1.y *= fdf->zoom;
 	p2.x *= fdf->zoom;
@@ -108,15 +70,15 @@ int	draw(t_fdf *fdf)
 
 	clear_image(fdf);
 	y = 0;
-	while (y < fdf->height)
+	while (fdf->map[y] != NULL)
 	{
 		x = 0;
-		while (x < fdf->width)
+		while (fdf->map[y][x] != NULL)
 		{
-			if (x < fdf->width - 1)
-				draw_lines(x, y, x + 1, y, fdf);
+			if (fdf->map[y][x + 1] != NULL)
+				draw_lines(get_point(x, y, fdf), get_point(x + 1, y, fdf), fdf);
 			if (y < fdf->height - 1)
-				draw_lines(x, y, x, y + 1, fdf);
+				draw_lines(get_point(x, y, fdf), get_point(x, y + 1, fdf), fdf);
 			x++;
 		}
 		y++;

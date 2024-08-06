@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 19:48:29 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/01 22:49:48 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:04:29 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@ static int	merge_color(int color)
 	result_color.red = (color >> 16) & 0XFF;
 	result_color.green = (color >> 8) & 0XFF;
 	result_color.blue = color & 0XFF;
-	return ((result_color.red << 16) | (result_color.green << 8) | result_color.blue);
+	return ((result_color.red << 16) | (result_color.green << 8) | \
+			result_color.blue);
 }
 
 /*	THIS FUNCTION RETURNS THE COLOR INTERPOLATED BETWEEN TWO COLORS	*/
-int interpolate_color(int color1, int color2, float factor)
+int	interpolate_color(int color1, int color2, float factor)
 {
-	t_color col1;
-	t_color col2;
-	t_color result;
+	t_color	col1;
+	t_color	col2;
+	t_color	result;
 
 	col1.red = (color1 >> 16) & 0xFF;
 	col1.green = (color1 >> 8) & 0xFF;
@@ -47,14 +48,13 @@ int interpolate_color(int color1, int color2, float factor)
 int	get_color(char *s, t_fdf *fdf)
 {
 	int	k;
-	
+
 	(void)fdf;
 	k = ft_char_in_str(s, ',');
 	if (k)
 	{
 		k++;
-		return(merge_color(ft_htoi(&s[k])));
+		return (merge_color(ft_htoi(&s[k])));
 	}
 	return (0xffffff);
 }
-
