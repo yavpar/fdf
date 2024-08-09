@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/30 22:21:36 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 12:05:26 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:48:51 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # define TEXT 0x76d7c4
 # define BLACK 0x000000
 # define WHITE 0xffffff
+# define COLOR1 0x0000ff;
+# define COLOR2 0xff0000;
 
 typedef struct s_2d
 {

@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 19:48:29 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/04 17:04:44 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:49:08 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	get_color(char *s, t_fdf *fdf)
 	int		color1;
 	int		color2;
 
-	color1 = 0x0000ff;
-	color2 = 0xff0000;
+	color1 = COLOR1;
+	color2 = COLOR2;
 	k = ft_char_in_str(s, ',');
 	if (k)
 	{

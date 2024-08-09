@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 14:23:59 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 12:05:02 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:32:49 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,3 @@ int	main(int ac, char **av)
 	ft_clear(fdf, 1, 0);
 	return (0);
 }
-

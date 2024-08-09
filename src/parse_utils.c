@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 09:36:27 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 10:24:16 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:32:04 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	find_max_min(t_fdf *fdf, char *dest)
 static int	fill_map(char **dest, char **src, t_fdf *fdf)
 {
 	int	k;
+
 	k = 0;
 	while (src[k])
 	{

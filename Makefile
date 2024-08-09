@@ -13,13 +13,13 @@ INCLUDE_BONUS = include_bonus
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -O3 -g3 -fPIE
 RM = rm -f
-FLAGS = -ldl -Imlx -L./mlx/ -lm -lbsd -lXext -lX11 -Wl,-rpath=./bass/,-rpath=./mlx/,-rpath=./delay/ -fPIC
+FLAGS = -ldl -Imlx -L./mlx/ -lm -lbsd -lXext -lX11 -fPIC
 SMAKE = make --no-print-directory
 SRC_FILE = fdf input init parse destroy draw color mat_operation parse_utils \
 				pixel_to_image
 SRC_FILES_BONUS = fdf_bonus input_bonus init_bonus parse_bonus destroy_bonus \
 				draw_bonus color_bonus mat_operation_bonus \
-				parse_utils_bonus pixel_to_image_bonus
+				parse_utils_bonus draw_pixel_and_menu_bonus
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILE)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILE)))
@@ -35,8 +35,7 @@ $(LIBFT):
 #MLX library
 PATH_MLX = ./minilibx-linux/
 MLX = $(PATH_MLX)libmlx.a
-$(PATH_MLX):
-	git submodule update --init --recursive
+
 $(MLX): $(PATH_MLX)
 	@$(MAKE) -C $(PATH_MLX)
 
@@ -70,8 +69,4 @@ fclean:	clean
 
 re: fclean all
 
-forbidden:
-	nm -gu $(NAME)
-
 .PHONY: bonus all clean fclean re
-

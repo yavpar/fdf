@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:24:04 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 13:41:38 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 15:34:12 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,6 @@ static t_matrix	rot_matrix_z(float alpha)
 		0}});
 }
 
-/*	THIS FUNCTION RETURNS THE PARALLEL PROJECTION MATRIX	*/
-
-t_3d perspective(t_3d v, float d)
-{
-	float factor;
-	
-	factor = 1.0 / (1.0 - v.z / d);
-	v.x *= factor;
-	v.y *= factor;
-    return v;
-}
-
-// static t_matrix paralelle(void)
-// {
-// 	return ((t_matrix){(t_3d){1, 0, 0, 0}, (t_3d){0, 1, 0, 0}, (t_3d){0, 0, 1,
-// 		0}});
-// }
-
 /*	THIS FUNCTION ROTATES THE IMAGE IN ORDER TO SET THE ISOMETRIC VIEW 	*/
 /*	OR ANOTHER VIEW, LIKE FLAT VIEW										*/
 t_3d	to_iso(t_3d v, t_fdf *fdf)
@@ -98,7 +80,7 @@ t_3d	to_iso(t_3d v, t_fdf *fdf)
 		v = mat_x_vec(rot_matrix_x(fdf->ang_x), v);
 	}
 	else if (fdf->paralelle_x)
-	{		
+	{
 		v = mat_x_vec(rot_matrix_z(fdf->ang_z), v);
 		v = mat_x_vec(rot_matrix_x(fdf->ang_x), v);
 	}

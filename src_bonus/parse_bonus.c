@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 15:57:12 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 10:32:39 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/06 16:03:54 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ static int	get_height(char *file, int fd)
 		if (y_line)
 			free(y_line);
 	}
-	else
-		ft_putstr_fd("FDF: Error get_height()\n", 2);
 	close(fd);
 	return (y);
 }
@@ -91,8 +89,6 @@ static void	malloc_lines(t_fdf *fdf, char *file, int fd)
 
 	fd = open(file, O_RDONLY);
 	x_line = get_next_line(fd);
-	if (!x_line)
-		fatal_error("FDF: Error gnl()\n", fdf);
 	y = 0;
 	while (y < fdf->height)
 	{

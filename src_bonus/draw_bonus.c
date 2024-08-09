@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/09 17:32:30 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 10:29:51 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/08 16:52:37 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	draw(t_fdf *fdf)
 		{
 			if (fdf->map[y][x + 1] != NULL)
 				draw_lines(get_point(x, y, fdf), get_point(x + 1, y, fdf), fdf);
-			if (y < fdf->height - 1)
+			if ((y < fdf->height - 1) && (fdf->map[y + 1][x] != NULL))
 				draw_lines(get_point(x, y, fdf), get_point(x, y + 1, fdf), fdf);
 			x++;
 		}

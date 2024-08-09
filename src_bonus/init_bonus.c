@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 17:27:06 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 12:06:16 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/09 17:24:01 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,5 @@ void	init_variables(t_fdf *fdf)
 	fdf->ang_x = atan(sqrt(2));
 	fdf->ang_z = 30;
 	fdf->ang_y = 0;
-	fdf->pad = 0.3;
+	fdf->pad = 1.2;
 }

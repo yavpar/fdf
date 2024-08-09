@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 13:17:38 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/04 16:23:26 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/09 14:10:24 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	clear_image(t_fdf *fdf)
 			{
 				i = (x * (fdf->bpp / 8)) + (fdf->line_len * y);
 				if (i >= 0 && i < (WIDTH * HEIGHT * (fdf->bpp / 8)))
-					*(unsigned int *)(fdf->img_data + i) = 0;
+					*(unsigned int *)(fdf->img_data + i) = 0xff00ff;
 			}
 			++x;
 		}

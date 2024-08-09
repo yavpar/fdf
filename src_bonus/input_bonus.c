@@ -6,7 +6,7 @@
 /*   By: yparthen <yparthen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/29 13:58:23 by yparthen          #+#    #+#             */
-/*   Updated: 2024/08/06 13:41:27 by yparthen         ###   ########.fr       */
+/*   Updated: 2024/08/09 17:28:33 by yparthen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 static void	input4(int keysym, t_fdf *fdf)
 {
-	if (keysym == XK_y)
+	if (keysym == XK_l)
 	{
 		fdf->paralelle_y = 1;
 		fdf->ang_y = -PI / 2;
@@ -46,14 +46,14 @@ static void	input3(int keysym, t_fdf *fdf)
 	else if (keysym == 65435)
 	{
 		fdf->rotation = 1;
-	 	fdf->ang_y -= 0.1;
+		fdf->ang_y -= 0.1;
 	}
 	else if (keysym == 65429)
 	{
 		fdf->rotation = 1;
 		fdf->ang_y += 0.1;
 	}
-	if (keysym == XK_x)
+	if (keysym == XK_f)
 	{
 		fdf->paralelle_x = 1;
 		fdf->ang_x = PI / 2;
@@ -118,35 +118,4 @@ int	input(int keysym, t_fdf *fdf)
 	mlx_clear_window(fdf->mlx, fdf->mlx_win);
 	draw(fdf);
 	return (0);
-}
-
-/*	THIS FUNCION SHOWS INFORMATATION ABOUT THE PROGRAM NAME AND				*/
-/*	ALL THE FUNCTIONALITIES AVAIBLES IN ORDER TO INTERACT WITH THE IMAGE	*/
-void	draw_menu(t_fdf *fdf)
-{
-	int		y;
-	void	*mlx;
-	void	*win;
-
-	y = 0;
-	mlx = fdf->mlx;
-	win = fdf->mlx_win;
-	mlx_string_put(mlx, win, 40, y += 20, WHITE, "Press the following keys:");
-	mlx_string_put(mlx, win, 15, y += 50, TEXT, "Zoom:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, " + / - key");
-	mlx_string_put(mlx, win, 15, y += 40, TEXT, "Pad +/-:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "8 / 2 key");
-	mlx_string_put(mlx, win, 15, y += 40, TEXT, "Move:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Up arrow or w key");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Down arrow or s key");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Left arrow or a key");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Right arrow or d key");
-	mlx_string_put(mlx, win, 15, y += 40, TEXT, "Rotate:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Z-Axis - Key 4 or 6");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Y-Axis - Key 7 or 3");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "Z-Axis - Key 4 or 6");
-	mlx_string_put(mlx, win, 15, y += 40, TEXT, "Top view:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "  f key");
-	mlx_string_put(mlx, win, 15, y += 40, TEXT, "Isometric view:");
-	mlx_string_put(mlx, win, 57, y += 25, WHITE, "i key");
 }
